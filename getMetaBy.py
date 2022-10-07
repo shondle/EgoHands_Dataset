@@ -1,37 +1,53 @@
 import scipy.io as sio
 import numpy as np
 
-# just trying to get a sense of how to handle metadata.mat, so no function with parameters declared yet
+## this is assuming location, activity, viewer, and partner are all passed in (all-inclusive)
+## just trying to get this right for now to test functionality
+def getMetaBy(Location, Activity, Viewer, Partner):
 
-# Selma added this
-meta_contents = sio.loadmat('./metadata.mat')
+    # splitting each input variable so we can check multiple conditions
+    location = Location.split(", ")
+    activity = Activity.split(", ")
+    viewer = Viewer.split(", ")
+    partner = Partner.split(", ")
 
-## MATLAB can't pass nested struct objects through MATLAB ENGINE API to python, so, unless I missed something,
-## we have to rewrite the getMetaBy function using python libraries.
+    # loading metadata.mat
+    meta_contents = sio.loadmat('./metadata.mat')
+    struct = meta_contents['video']
 
-## from below commented out code, we know that 'video' is one of the keys for this dict
-print(meta_contents.keys())
+    # creating an empty numpy array to append to later
+    videos = np.empty(0)
 
-## assigning a nested struct to a variable using the 'video' key
-struct = meta_contents['video']
+    # looping through to find which combinations are found in the dataset, and returning the video
+    # (when all four inputs given)
+    # sorry for the weird alphabet structure in the for loops, I'll fix that
+    for a in range(len(location)):
+        for b in range(len(activity)):
+            for d in range(len(viewer)):
+                for e in range(len(partner)):
+                    for c in range(48):
+                        matrix = struct[0][c]
+                        if ((matrix[4] == location[a]) & (matrix[5] == activity[b]) & (matrix[2] == viewer[d]) & (matrix[3] == partner[e])).any():
+                            # print(c) returns the correct index for the video in the list with the inputs given
+                            # so, I know that the for loops are built correctly, at least conceptually
+                            print(c)
 
-## from below, it is clear struct is a numpy.ndarray object, refer to https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html
-print(type(struct))
+                            # however I can't figure out how to return and store this correctly
+                            # this attempts to append labelled frames struct for identified video
+                            videos = np.append(videos, matrix[6])
 
-## here, we can look at a segment of meta_contents' values
-## it is clear this segment of the struct has nested structs
-matrix = struct[0, 0]
-# print(matrix)
+                            # this attempts to append all the video's data given in metadata.mat
+                            #videos = np.append(videos, struct[0][c])
+    return videos
 
-## Below code proves the struct is mutable
-# struct[0,0] = struct[0,1]
-# print(struct[0,0])
+    # when calling I get the following error message -
 
-# running `print(matrix)`, we are given dtypes of 'frame_num', 'my_left', 'my_right', 'yourleft', and 'yourright'
+    # The DType <class 'numpy.dtype[float64]'> could not be promoted by <class 'numpy.dtype[void]'>.
+    # This means that no common DType exists for the given inputs.
+    # For example they cannot be stored in a single array unless the dtype is `object`.
+    # The full list of DTypes is: (<class 'numpy.dtype[float64]'>, <class 'numpy.dtype[void]'>)
 
-# I'm stumped for the next steps to parse metadata.mat correctly, however. When I run print(matrix[0][0]) it says there are
-# "too many indices for array: array is 0-dimensional, but 2 were indexed." My question - Why is it 0-dimensional?
+# Perhaps this is relevant?
+# https://stackoverflow.com/questions/55437498/numpy-append-typeerror-invalid-type-promotion
 
-# update
-# AHA!!! Only use one indexing number and it returns what input we should pass into getMetaBy. NICE!
-print(matrix[2])
+# Also, do I need to return the entire struct set, or just the labelled frames?
