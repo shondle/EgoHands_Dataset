@@ -2,13 +2,15 @@
 
 import matlab.engine
 import numpy as np
+import scipy.io as sio
+from getMetaBy import getMetaBy
 
-## constructing matlab engine to reference
+# constructing matlab engine to reference
 eng = matlab.engine.start_matlab()
 
-## direct engine to path with matlab files and dataset located
+# direct engine to path with matlab files and dataset located
 eng.addpath(r'')
 
-# structure arrays not supported in MATLAB Engine API, so this must be done manually
-# videos = {}
-# videos = eng.getMetaBy('Location', 'COURTYARD', 'Activity', 'PUZZLE')
+# supplying inputs for Location, Activity, Viewer, and Partner into getMetaBy
+# don't need to run the MATLAB Engine for getMetaBy
+videos1 = getMetaBy('COURTYARD', 'CARDS', 'B, H', 'T, S')
