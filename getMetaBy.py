@@ -1,53 +1,83 @@
 import scipy.io as sio
+import pandas as pd
 import numpy as np
 
 ## this is assuming location, activity, viewer, and partner are all passed in (all-inclusive)
 ## just trying to get this right for now to test functionality
-def getMetaBy(Location, Activity, Viewer, Partner):
+def getMetaBy(*args):
+
+    """
+        :param location: OFFICE, COURTYARD, LIVINGROOM
+        :param activity: CHESS, JENGA, PUZZLE, CARDS
+        :param viewer: B, S, T, H
+        :param partner: B, S, T, H
+        :param main_split: TRAIN, TEST, VALID
+        :return: A list of queried video data by input parameters: location, activity, viewer, partner, main_split
+    """
+
+    ## assigning from arguments given
+    for arg in args:
+        if arg == "Location":
+            parameterCheck = "Location"
+        elif parameterCheck == "Location":
+            inLocation = arg
+            parameterCheck = 'n/a'
+        if arg == "Activity":
+            parameterCheck = "Activity"
+        elif parameterCheck == "Activity":
+            inActivity = arg
+            parameterCheck = 'n/a'
+        if arg == "Viewer":
+            parameterCheck = "Viewer"
+        elif parameterCheck == "Viewer":
+            inViewer = arg
+            parameterCheck = 'n/a'
+        if arg == "Partner":
+            parameterCheck = "Partner"
+        elif parameterCheck == "Partner":
+            inPartner = arg
+            parameterCheck = 'n/a'
+        if arg == "Main_Split":
+            parameterCheck = "Main_Split"
+        elif parameterCheck == "Main_Split":
+            inMain_Split = arg
+            parameterCheck = 'n/a'
+
 
     # splitting each input variable so we can check multiple conditions
-    location = Location.split(", ")
-    activity = Activity.split(", ")
-    viewer = Viewer.split(", ")
-    partner = Partner.split(", ")
+    location = inLocation.split(", ")
+    activity = inActivity.split(", ")
+    viewer = inViewer.split(", ")
+    partner = inPartner.split(", ")
 
     # loading metadata.mat
     meta_contents = sio.loadmat('./metadata.mat')
-    struct = meta_contents['video']
+    annotations = meta_contents['video'][0]
+    annotations_df = pd.DataFrame(annotations, columns=['video_id', 'partner_video_id', 'ego_viewer_id', 'partner_id',
+                                                        'location_id', 'activity_id', 'labelled_frames'])
 
-    # creating an empty numpy array to append to later
-    videos = np.empty(0)
 
-    # looping through to find which combinations are found in the dataset, and returning the video
-    # (when all four inputs given)
-    # sorry for the weird alphabet structure in the for loops, I'll fix that
-    for a in range(len(location)):
-        for b in range(len(activity)):
-            for d in range(len(viewer)):
-                for e in range(len(partner)):
-                    for c in range(48):
-                        matrix = struct[0][c]
-                        if ((matrix[4] == location[a]) & (matrix[5] == activity[b]) & (matrix[2] == viewer[d]) & (matrix[3] == partner[e])).any():
-                            # print(c) returns the correct index for the video in the list with the inputs given
-                            # so, I know that the for loops are built correctly, at least conceptually
-                            print(c)
+    # data cleaning operation. when we load the np array -> pandas df object,
+    # single entries are actually list-type of length 1
+    annotations_df['ego_viewer_id'] = annotations_df['ego_viewer_id'].apply(lambda x: x[0])
+    queried_activities = annotations_df.loc[annotations_df['ego_viewer_id'].isin(viewer)]
 
-                            # however I can't figure out how to return and store this correctly
-                            # this attempts to append labelled frames struct for identified video
-                            videos = np.append(videos, matrix[6])
+    annotations_df['partner_id'] = annotations_df['partner_id'].apply(lambda x: x[0])
+    queried_activities = queried_activities.loc[annotations_df['partner_id'].isin(partner)]
 
-                            # this attempts to append all the video's data given in metadata.mat
-                            #videos = np.append(videos, struct[0][c])
-    return videos
+    annotations_df['location_id'] = annotations_df['location_id'].apply(lambda x: x[0])
+    queried_activities = queried_activities.loc[annotations_df['location_id'].isin(location)]
 
-    # when calling I get the following error message -
+    annotations_df['activity_id'] = annotations_df['activity_id'].apply(lambda x: x[0])
+    queried_activities = queried_activities.loc[annotations_df['activity_id'].isin(activity)]
 
-    # The DType <class 'numpy.dtype[float64]'> could not be promoted by <class 'numpy.dtype[void]'>.
-    # This means that no common DType exists for the given inputs.
-    # For example they cannot be stored in a single array unless the dtype is `object`.
-    # The full list of DTypes is: (<class 'numpy.dtype[float64]'>, <class 'numpy.dtype[void]'>)
+    return queried_activities
 
-# Perhaps this is relevant?
-# https://stackoverflow.com/questions/55437498/numpy-append-typeerror-invalid-type-promotion
 
-# Also, do I need to return the entire struct set, or just the labelled frames?
+if __name__ == '__main__':
+    # a main method that runs to this file for debugging purposes.
+    print('Begin getMetaBy.py program')
+    videos = getMetaBy('Location', 'LIVINGROOM, OFFICE', 'Activity', 'JENGA, CARDS', 'Viewer', 'B, S, T, H', 'Partner', 'B, S, T, H')
+    print(videos)
+    print('End getMetaBy.py program')
+
