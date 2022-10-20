@@ -15,6 +15,12 @@ def getMetaBy(*args):
         :return: A list of queried video data by input parameters: location, activity, viewer, partner, main_split
     """
 
+    inLocation = 'OFFICE, COURTYARD, LIVINGROOM'
+    inViewer = 'B, S, T, H'
+    inPartner = 'B, S, T, H'
+    inActivity = 'CHESS, JENGA, PUZZLE, CARDS'
+
+
     ## assigning from arguments given
     for arg in args:
         if arg == "Location":
@@ -45,6 +51,7 @@ def getMetaBy(*args):
 
 
     # splitting each input variable so we can check multiple conditions
+
     location = inLocation.split(", ")
     activity = inActivity.split(", ")
     viewer = inViewer.split(", ")
@@ -76,8 +83,12 @@ def getMetaBy(*args):
 
 if __name__ == '__main__':
     # a main method that runs to this file for debugging purposes.
-    print('Begin getMetaBy.py program')
-    videos = getMetaBy('Location', 'LIVINGROOM, OFFICE', 'Activity', 'JENGA, CARDS', 'Viewer', 'B, S, T, H', 'Partner', 'B, S, T, H')
-    print(videos)
-    print('End getMetaBy.py program')
+    a = 5
+    # print('Begin getMetaBy.py program')
+    # videos = getMetaBy('Location', 'LIVINGROOM, OFFICE', 'Activity', 'JENGA, CARDS', 'Viewer', 'B, S, T, H', 'Partner', 'B, S, T, H')
+    videos = getMetaBy('Location', 'COURTYARD', 'Activity', 'PUZZLE')
+    ## first one is PUZZLE_COURTYARD_B_S
+    print((videos.iloc[0]).loc['video_id'])
+    # print(((videos.iloc[0]).loc['labelled_frames'])[0][7][0][0][0])
+    # print('End getMetaBy.py program')
 
