@@ -18,7 +18,6 @@ def getBoundingBoxes(video, i):
 
 def segmentation2box(shape):
     box_xyxy = np.round(np.array([np.min(shape[:, 0]), np.min(shape[:, 1]), np.max(shape[:, 0]), np.max(shape[:, 1])]))
-    print(box_xyxy)
     box_xyxy[0] = max(1, box_xyxy[0])
     box_xyxy[1] = max(1, box_xyxy[1])
     box_xyxy[2] = min(1280, box_xyxy[2])
