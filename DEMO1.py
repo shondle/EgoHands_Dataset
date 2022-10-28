@@ -1,25 +1,46 @@
 from getMetaBy import getMetaBy
 from getFramePath import getFramePath
 from getSegmentationMask import getSegmentationMask
-import scipy as sio
+from getBoundingBoxes import getBoundingBoxes
+import numpy as np
 import cv2
-import pandas as pd
+from matplotlib import pyplot as plt
 
 videos = getMetaBy('Location', 'COURTYARD', 'Activity', 'PUZZLE')
+
+fig = plt.figure(figsize=(4, 7))
+rows = 3
+columns = 1
+
+
 img = cv2.imread(str(getFramePath(videos.iloc[0], 7)))
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+fig.add_subplot(rows, columns, 1)
+plt.imshow(img)
+plt.axis('off')
+plt.title("Video: " + (videos.iloc[0]).loc['video_id'][0] + " - Frame #" + "8")
 
 hand_mask = getSegmentationMask(videos.iloc[0], 7, 'all')
 bounding_boxes = getBoundingBoxes(videos.iloc[0], 7)
 
-cv2.namedWindow('window', cv2.WINDOW_NORMAL)
-cv2.imshow('window', hand_mask)
-cv2.waitKey(0)
+## Blue
+rect = cv2.rectangle(img, np.int32(bounding_boxes[0]), (0, 0, 255), 3)
+## Yellow
+rect = cv2.rectangle(img, np.int32(bounding_boxes[1]), (255, 255, 0), 3)
+## Red
+rect = cv2.rectangle(img, np.int32(bounding_boxes[2]), (255, 0, 0), 3)
+## Green
+rect = cv2.rectangle(img, np.int32(bounding_boxes[3]), (0, 255, 0), 3)
 
-# testing rectangles from getBoundingBoxes
-rect = cv2.rectangle(img, np.int32(bounding_boxes[0]), (255, 255, 255), 3)
-rect = cv2.rectangle(img, np.int32(bounding_boxes[1]), (255, 255, 255), 3)
-rect = cv2.rectangle(img, np.int32(bounding_boxes[2]), (255, 255, 255), 3)
-rect = cv2.rectangle(img, np.int32(bounding_boxes[3]), (255, 255, 255), 3)
+fig.add_subplot(rows, columns, 2)
+plt.imshow(hand_mask)
+plt.axis('off')
+plt.title("Hand Segmentation")
 
-cv2.imshow('window', rect)
-cv2.waitKey(0)
+fig.add_subplot(rows, columns, 3)
+plt.imshow(rect)
+plt.axis('off')
+plt.title("Bounding Boxes")
+plt.show()
+
