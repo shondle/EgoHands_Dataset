@@ -1,5 +1,10 @@
+from PIL import Image
 from torch.utils.data import Dataset
 from getTrainingImgs import getTrainingMask, getTrainingImage
+
+# This is the code which created the PyTorch dataset object with
+# colored image and respective segmentation labels. See how to create and
+# object and visualize the data from visualizedDataset.py
 
 class EgoHandsDataset(Dataset):
 
