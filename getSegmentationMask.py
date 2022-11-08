@@ -1,79 +1,44 @@
-from getMetaBy import getMetaBy
-from getFramePath import getFramePath
-from getSegmentationMask import getSegmentationMask
-from getBoundingBoxes import getBoundingBoxes
+import scipy.io as sio
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
+
+ # getSegmentationMask(vid, i, hand_type) returns the binary segmentation mask
+ # for hands in the "i"th frame in video "vid", where "vid" is an EgoHands video
+ # metadata structure.
+ #
+ #   img_mask = getSegmentationMask(vid, 1, 'all') returns a mask for all hands in first frame of vid
+ #
+ #   img_mask = getSegmentationMask(vid, 1, 'mine') returns a mask for all egocentric observer hands in first frame of vid
+ #
+ #   img_mask = getSegmentationMask(vid, 1, 'your_right') returns a mask for all egocentric partner's right hand in first frame of vid
+ #
+ #   Possible values for hand_type are "all", "mine", "yours", "my_left", "my_right", "your_left", "your_right".
+ #
+ #
+ #   For full dataset details, see the <a href="matlab: web('http://vision.soic.indiana.edu/egohands')">EgoHands project website</a>.
+ #
+ #  See also getFramePath, getMetaBy, getBoundingBoxes, showLabelsOnFrame
+
+def getSegmentationMask(video, i, hand_type):
+    img_mask = np.zeros([720, 1280, 3], dtype= "uint8")
+    if (hand_type == 'my_left' or hand_type=='mine' or hand_type == 'all'
+            and np.any(video.loc['labelled_frames'][0][i][1])):
+        shape = np.int32(video.loc['labelled_frames'][0][i][1])
+        # all make a white mask
+        img_mask = cv2.fillPoly(img_mask, pts=[shape], color=(255, 255, 255))
+    if (hand_type == 'my_right' or hand_type=='mine' or hand_type == 'all'
+            and np.any(video.loc['labelled_frames'][0][i][2])):
+        shape = np.int32(video.loc['labelled_frames'][0][i][2])
+        img_mask = cv2.fillPoly(img_mask, pts=[shape], color=(255, 255, 255))
+    if (hand_type == 'your_left' or hand_type == 'yours' or hand_type == 'all'
+            and np.any(video.loc['labelled_frames'][0][i][3])):
+        shape = np.int32(video.loc['labelled_frames'][0][i][3])
+        img_mask = cv2.fillPoly(img_mask, pts=[shape], color=(255, 255, 255))
+    if (hand_type == 'your_right' or hand_type == 'yours' or hand_type == 'all'
+            and np.any(video.loc['labelled_frames'][0][i][4])):
+        shape = np.int32(video.loc['labelled_frames'][0][i][4])
+        img_mask = cv2.fillPoly(img_mask, pts=[shape], color=(255, 255, 255))
+
+    return img_mask
 
 
-# This demo shows how to load and access ground-truth data for any of the videos.
-
-# Let's load all videos at the courtyard location where the activity was puzzle solving.
-# getMetaBy() returns a struct array that contains all possible meta information (including
-# the ground-truth data) about the videos. Check the getMetaBy() documentation for more.
-
-videos = getMetaBy('Location', 'COURTYARD', 'Activity', 'PUZZLE')
-
-# Each video has 100 annotated frames. Let's consider the first video. One can access the 8th frame
-# of the first video like this:
-videoNumber = 1 # enter which video you want here
-frameNumber = 8 # enter frame number you want here
-
-videoNumber = videoNumber - 1
-frameNumber = frameNumber - 1
-
-# creating figure to display
-fig = plt.figure(figsize=(4, 7))
-rows = 3
-columns = 1
-
-# getting colored image
-img = cv2.imread(str(getFramePath(videos.iloc[videoNumber], frameNumber)))
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-# showing colored image on figure
-fig.add_subplot(rows, columns, 1)
-plt.imshow(img)
-plt.axis('off')
-plt.title("Video: " + (videos.iloc[videoNumber]).loc['video_id'][videoNumber] + " - Frame #%s" % (frameNumber+1))
-
-
-# Here is how to get a binary mask with hand segmentations for the current frame. The third argument
-# implies that the mask will show "all" hands. To get masks for specific hands, change this argument
-# to e.g. "my_right" or "yours" to get only the observer's right hand or only the other actor's
-# hands respectively. Check the getSegmentationMask() documentation for more.
-hand_mask = getSegmentationMask(videos.iloc[videoNumber], frameNumber, 'all')
-
-
-# The bounding boxes for each hand are also easily accessible. The function below returns a 4x4
-# matrix, where each row corresponds to a hand bounding box in the format [x y width height], where
-# x and y mark the top left corner of the box. The rows from top to bottom contain the bounding
-# boxes for "own left", "own right", "other left", and "other right" hand respectively. If a hand
-# is not in the frame, the values are set to 0.
-bounding_boxes = getBoundingBoxes(videos.iloc[videoNumber], frameNumber)
-
-## assigning colors to each of the bounding boxes
-## Blue
-rect = cv2.rectangle(img, np.int32(bounding_boxes[0]), (0, 0, 255), 3)
-## Yellow
-rect = cv2.rectangle(img, np.int32(bounding_boxes[1]), (255, 255, 0), 3)
-## Red
-rect = cv2.rectangle(img, np.int32(bounding_boxes[2]), (255, 0, 0), 3)
-## Green
-rect = cv2.rectangle(img, np.int32(bounding_boxes[3]), (0, 255, 0), 3)
-
-## display the segmentation mask
-fig.add_subplot(rows, columns, 2)
-plt.imshow(hand_mask)
-plt.axis('off')
-plt.title("Hand Segmentation")
-
-# display the bounding boxes
-fig.add_subplot(rows, columns, 3)
-plt.imshow(rect)
-plt.axis('off')
-plt.title("Bounding Boxes")
-plt.show()
-
-# print(len(videos.iloc[videoNumber].loc['labelled_frames'][0]))
