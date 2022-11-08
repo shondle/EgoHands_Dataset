@@ -2,8 +2,33 @@ import scipy.io as sio
 import pandas as pd
 import numpy as np
 
-## this is assuming location, activity, viewer, and partner are all passed in (all-inclusive)
-## just trying to get this right for now to test functionality
+# From the original EgoHands code from Indiana University-
+# getMetaBy  Returns EgoHands video metadata structures for videos which
+# match the argument filters. For a description of the metadata structure
+# see buildMetadata help.
+#
+#   C = getMetaBy() returns metadata for all videos.
+#
+#   C = getMetaBy(FilterName, Value, ...) returns metadat for all videos
+#   matching the filters. Possible filters and values are listed below:
+#
+#   Filter            Possible Values        Info
+#   ----------        --------------------   ------------------------
+#   'Location'        'OFFICE','COURTYARD',  Video background location
+#                     'LIVINGROOM'
+#
+#   'Activity'        'CHESS','JENGA',       Activity in video
+#                     'PUZZLE','CARDS'
+#
+#   'Viewer'          'B','S','T','H'        Identity of egocentric viewer
+#
+#   'Partner'         'B','S','T','H'        Identity of egocentric partner
+#
+#   Multiple filters and values can be mixed, for example:
+#   getMetaBy('Location','OFFICE, COURTYARD', 'Activity','CHESS', 'Viewer', 'B,S,T')
+#   would return all videos of Chess played with B,S, or T as the egocentric
+#   observer filmed at the Office or Courtyard locations.
+
 def getMetaBy(*args):
 
     """
