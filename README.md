@@ -35,10 +35,6 @@ Next,
 ```console
 conda activate EgoHands Dataset
 conda install pip
-pip install ipykernel
-python -m ipykernel install — user --name EgoHandsDataset --display-name “EgoHandsDataset"
-
-conda install pup
 pip install opencv-python
 
 //Scipy, numpy, pandas, openCV, matplotlib, pathlib
