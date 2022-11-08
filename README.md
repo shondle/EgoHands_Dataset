@@ -23,6 +23,7 @@ Use a package manager, such as Anaconda, to download the following libraries in 
 - PyTorch
 - OpenCV
 - Matplotlib
+- pathlib
 
 In your IDE/Compiler, where the project is downloaded, set the interpreter to the new environment you just created. 
 
