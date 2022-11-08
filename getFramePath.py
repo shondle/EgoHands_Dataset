@@ -10,7 +10,7 @@ from pathlib import Path
 
 def getFramePath(video, i):
     # change path to generic before sending
-    base_path = Path(r'.\egohands_data\_LABELLED_SAMPLES'
+    base_path = Path(r'.\_LABELLED_SAMPLES'
                        + '/'
                        + (video.loc['video_id'])[0])
     frame_path = base_path.joinpath(Path('frame_%(number)04d.jpg' % \
