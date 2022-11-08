@@ -1,5 +1,19 @@
 import numpy as np
 
+ # getBoundingBoxes(vid, i) returns the ground-truth bounding boxes for the "ith" annotated frame of
+ # video "vid", where "vid" is an EgoHands video metadata structure.
+ #
+ # Boxes is a 4x4 matrix, where each row corresponds to a hand bounding box in the format [x y width
+ # height], where x and y mark the top left corner of the box. The rows from top to bottom contain
+ # the bounding boxes for "own left", "own right", "other left", and "other right" hand respectively.
+ # If a hand is not in the frame, the values are set to 0.
+ #
+ #
+ #   For full dataset details, see the <a href="matlab: web('http://vision.soic.indiana.edu/egohands')">EgoHands project website</a>.
+ #
+ #   See also getFramePath, getMetaBy, getSegmentationMask, showLabelsOnFrame
+
+
 def getBoundingBoxes(video, i):
     boxes = np.zeros([4, 4])
     if np.any(video.loc['labelled_frames'][0][i][1]):
