@@ -1,6 +1,6 @@
 # EgoHands_Dataset
 
-Query over 48 hours of Google Glass video complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. All using Python!
+Query videos with over 48 hours of complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. All using Python!
 
 <table>
 <tr>
@@ -21,7 +21,7 @@ This project makes it easier for developers to run ML models for hand segmentati
 
 Each file contains a description of what it does. 
 
-`getMetaBy.py`, `getSegmentationMask.py`, `getFramePath.py`, `getBoundingBoxes.py`, and `DEMO1.py` contain (for the most part) the same descriptions as from the original EgoHands MATLAB code. The rest (`getTrainingImgs.py`, `visualizeDataset.py`, `dataset.py`) are commented out by myself.
+`getMetaBy.py`, `getSegmentationMask.py`, `getFramePath.py`, `getBoundingBoxes.py`, and `DEMO1.py` contain (for the most part) the same descriptions as from the original EgoHands MATLAB code. The rest (`getTrainingImgs.py`, `visualizeDataset.py`, `dataset.py`) are fully commented out by myself.
 
 To get a quick overview of what this project can do, run `DEMO1.py` and read the commented out code. To view a sample PyTorch dataset queried from the videos, run `visualizeData.py`. All methods used and referenced include descriptions in the files themeselves.
 
@@ -69,14 +69,15 @@ conda install -c conda-forge scipy numpy pandas matplotlib pathlib
 
 **Installing PyTorch**
 <br>
-To install PyTorch, visit the [installation guide](https://pytorch.org/get-started/locally/). Scroll down and choose your configuration (For a sample run this is good enough - Stable, your OS, Python, CPU). Run the command it shows in the anaconda prompt.
+To install PyTorch, visit the [installation guide](https://pytorch.org/get-started/locally/). Scroll down and choose your configuration (For a sample run the following options are good enough: Stable, your OS, Python, CPU). In the anaconda prompt, copy, paste, and run the command the website shows you.
 
 <br>
 
 **Changing the Interpreter**
 <br>
-For most IDEs-
-In your IDE/Compiler, with your project open, set the interpreter's path to the new environment you just created. To find the path, enter the following in the Anaconda prompt and copy the path with an executable from the EgoHandsDataset environment-
+*Note: this is applicable to most IDEs, but not all*
+<br>
+In your IDE/Compiler, with your project open, set the interpreter's path to the new environment you just created. To find the path, enter the following in the Anaconda prompt and copy the path with the .exe file from the EgoHandsDataset environment-
 
 For Mac
 ```
