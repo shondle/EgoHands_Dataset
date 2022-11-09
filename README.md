@@ -1,6 +1,6 @@
 # EgoHands_Dataset
 
-Query videos with over 48 hours of complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. **Built entirely with Python!**
+Query over 48 hours of video containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. **Built entirely with Python!**
 
 <table>
 <tr>
