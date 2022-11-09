@@ -69,7 +69,7 @@ conda install -c conda-forge scipy numpy pandas matplotlib pathlib
 
 **Installing PyTorch**
 <br>
-To install PyTorch, visit the [installation guide](https://pytorch.org/get-started/locally/). Scroll down and choose Stable, your OS, Python, and just to run this code you can choose CPU. Of course, decide what is best based on your use case. Run the command it shows in the anaconda prompt.
+To install PyTorch, visit the [installation guide](https://pytorch.org/get-started/locally/). Scroll down and choose your configuration (For a sample run this is good enough - Stable, your OS, Python, CPU). Run the command it shows in the anaconda prompt.
 
 <br>
 
