@@ -1,6 +1,6 @@
 # EgoHands_Dataset
 
-Query videos with over 48 hours of complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. All using Python!
+Query videos with over 48 hours of complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. **Built entirely with Python!**
 
 <table>
 <tr>
@@ -89,7 +89,7 @@ For Windows
 where python
 ```
 
-### Downloading the EgoHands frames from Indiana University
+### Downloading the EgoHands Labelled Frames from Indiana University
 Go to [this link](http://vision.soic.indiana.edu/projects/egohands/) and download the "Labelled Data" Zip Archive (which should be around 1.3GB). Unzip this file and drag the \_LABELLEDSAMPLES\_ folder into the same folder where the files of this project are located.
 
 Now, you should be good to go!
@@ -99,3 +99,16 @@ Now, you should be good to go!
 ## Maintainer
 Contact me here-
 - **shivansh.s@utexas.edu**
+
+## Credit
+All videos and raw label data (the EgoHands dataset itself) come from the following paper
+
+<br>
+
+*Title:* Lending A Hand: Detecting Hands and Recognizing Activities in Complex Egocentric Interactions
+<br>
+*Authors:* Bambach, Sven and Lee, Stefan and Crandall, David J. and Yu, Chen
+<br>
+*Book:* The IEEE International Conference on Computer Vision (ICCV)
+<br>
+*Date:* December 2015
