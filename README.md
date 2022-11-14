@@ -101,14 +101,14 @@ Contact me here-
 - **shivansh.s@utexas.edu**
 
 ## Credit
-All videos and raw label data (the EgoHands dataset itself) come from the following paper
-
+All videos and raw label data (the EgoHands dataset itself) come from the following paper-
 <br>
-
-*Title:* Lending A Hand: Detecting Hands and Recognizing Activities in Complex Egocentric Interactions
-<br>
-*Authors:* Bambach, Sven and Lee, Stefan and Crandall, David J. and Yu, Chen
-<br>
-*Book:* The IEEE International Conference on Computer Vision (ICCV)
-<br>
-*Date:* December 2015
+```
+@InProceedings{Bambach_2015_ICCV,
+author = {Bambach, Sven and Lee, Stefan and Crandall, David J. and Yu, Chen},
+title = {Lending A Hand: Detecting Hands and Recognizing Activities in Complex Egocentric Interactions},
+booktitle = {The IEEE International Conference on Computer Vision (ICCV)},
+month = {December},
+year = {2015}
+}
+```
