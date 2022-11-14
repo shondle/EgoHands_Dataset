@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 
 #  getFramePath(vid, i) returns the file path to the "i"th labeled frame in video "vid", where "vid"
 #  is an EgoHands video metadata structure.
@@ -9,10 +9,6 @@ from pathlib import Path
 #    See also getBoundingBoxes, getMetaBy, getSegmentationMask, showLabelsOnFrame
 
 def getFramePath(video, i):
-    # change path to generic before sending
-    base_path = Path(r'.\_LABELLED_SAMPLES'
-                       + '/'
-                       + (video.loc['video_id'])[0])
-    frame_path = base_path.joinpath(Path('frame_%(number)04d.jpg' % \
-                                        {"number": (video.loc['labelled_frames'])[0][i][0][0][0]}))
+    base_path = os.path.join(os.getcwd(), '_LABELLED_SAMPLES', (video.loc['video_id'])[0])
+    frame_path = os.path.join(base_path, 'frame_%(number)04d.jpg' % {'number': (video.loc['labelled_frames'])[0][i][0][0][0]})
     return frame_path
