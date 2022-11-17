@@ -22,7 +22,7 @@ NUM_WORKERS = 2
 IMAGE_HEIGHT = 90  # 1280 originally
 IMAGE_WIDTH = 160  # 1918 originally
 PIN_MEMORY = True
-LOAD_MODEL = False
+LOAD_MODEL = True
 # TRAIN_IMG_DIR = "data/train_images/"
 # TRAIN_MASK_DIR = "data/train_masks/"
 # VAL_IMG_DIR = "data/val_images/"
@@ -63,6 +63,9 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
         # update tqdm loop
         loop.set_postfix(loss=loss.item())
+
+        # PATH = './ego_net.pth'
+        # torch.save(UNET.state_dict(), PATH)
 
 
 def main():
@@ -118,6 +121,7 @@ def main():
     scaler = torch.cuda.amp.GradScaler()
 
     for epoch in range(NUM_EPOCHS):
+        # comment out if you want to use checkpoint
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
 
         # save model
@@ -138,7 +142,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 # import torch
