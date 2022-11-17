@@ -39,11 +39,13 @@ def train_fn(trainloader, net, optimizer):
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels = data
 
+            # labels = labels.float().unsqueeze(1).to(device="cpu")
+
             print(inputs.shape)
             print(labels.shape)
 
-            inputs = inputs.float().to()
-            labels = labels.float().to()
+            # inputs = inputs.float().to()
+            # labels = labels.float().to()
 
 
             # zero the parameter gradients
@@ -51,8 +53,10 @@ def train_fn(trainloader, net, optimizer):
 
             # forward + backward + optimize
             outputs = net(inputs)
-            target = torch.argmax(outputs, dim=1)
+            # target = torch.argmax(outputs, dim=1)
+
             print(outputs.shape)
+            print(labels.shape)
 
             loss = criterion(outputs, labels)
             loss.backward()
