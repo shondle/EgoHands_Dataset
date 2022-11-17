@@ -32,7 +32,7 @@ class EgoHandsDataset(Dataset):
         mask = self.masks[index]
 
         if self.transform is not None:
-            augmentations = self.transform(img=img, mask=mask)
+            augmentations = self.transform(imgage=img, mask=mask)
             img = augmentations["image"]
             mask = augmentations["mask"]
 
