@@ -9,7 +9,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(6, 16, 5)
-        # self.fc1 = nn.LazyLinear(120)
+        self.fc1 = nn.LazyLinear(120)
         # self.adapt = nn.AdaptiveMaxPool2d((5, 7))
         self.fc1 = nn.Linear(703, 120)
         # self.fc1 = nn.Linear(16 * 5 * 5, 120)
@@ -21,6 +21,7 @@ class Net(nn.Module):
         # print(x.shape)
         x = self.pool(F.relu(self.conv2(x)))
         # print('final1', x.shape)
+        print('this', x.shape)
         x = torch.flatten(x, start_dim=1)  # flatten all dimensions except batch
         # print('final', x.shape)
         x = F.relu(self.fc1(x))
