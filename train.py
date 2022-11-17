@@ -22,7 +22,7 @@ NUM_WORKERS = 2
 IMAGE_HEIGHT = 90  # 1280 originally
 IMAGE_WIDTH = 160  # 1918 originally
 PIN_MEMORY = True
-LOAD_MODEL = True
+LOAD_MODEL = False
 # TRAIN_IMG_DIR = "data/train_images/"
 # TRAIN_MASK_DIR = "data/train_masks/"
 # VAL_IMG_DIR = "data/val_images/"
@@ -35,13 +35,13 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
         data = data.to(device=DEVICE)
         # targets = targets.float().unsqueeze(1).to(device=DEVICE)
         targets = targets.float().unsqueeze(1).to(device=DEVICE)
-        print(torch.unique(targets[:, :, :, :, 0]), 'index 0')
-        print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 1]))
-        print(torch.eq(targets[:, :, :, :, 1], targets[:, :, :, :, 2]))
-        print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 2]))
-
-        print(torch.unique(targets[:, :, :, :, 1]), 'index 1')
-        print(torch.unique(targets[:, :, :, :, 2]), 'index 2')
+        # print(torch.unique(targets[:, :, :, :, 0]), 'index 0')
+        # print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 1]))
+        # print(torch.eq(targets[:, :, :, :, 1], targets[:, :, :, :, 2]))
+        # print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 2]))
+        #
+        # print(torch.unique(targets[:, :, :, :, 1]), 'index 1')
+        # print(torch.unique(targets[:, :, :, :, 2]), 'index 2')
         targets = targets[:, :, :, :, 0]/255
 
 
@@ -121,7 +121,7 @@ def main():
     scaler = torch.cuda.amp.GradScaler()
 
     for epoch in range(NUM_EPOCHS):
-        # comment out if you want to use checkpoint
+        # comment out everything until save_predictions_as_image if you want to use checkpoint
         train_fn(train_loader, model, optimizer, loss_fn, scaler)
 
         # save model
@@ -142,6 +142,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 # import torch
