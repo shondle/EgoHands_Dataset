@@ -92,18 +92,21 @@ def save_predictions_as_imgs(
         )
 
         print(y.shape)
-        _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
+        # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
         # y_img = torch.zeros(3, h, w)
         # y_img[0, :, :] = y
         # y_img[1, :, :] = y
         # y_img[2, :, :] = y
 
-        _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
-        y_img = torch.zeros(16, h, w, 3)
-        y_img[:, :, :, 1] = y
-        y_img[:, :, :, 2] = y
-        y_img[:, :, :, 3] = y
+        # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
+        # y_img = torch.zeros(16, h, w, 3)
+        # y_img[:, :, :, 1] = y[:, :, :, 0]
+        # y_img[:, :, :, 2] = y[:, :, :, 0]
+        # y_img[:, :, :, 3] = y[:, :, :, 0]
 
-        torchvision.utils.save_image(y.unsqueeze(1), f"{folder}{idx}.png")
+        y = torch.movedim(y, 3, 1)
+        y = torch.movedim(y, 2, 3)
+
+        torchvision.utils.save_image(y.float(), f"{folder}{idx}.png")
 
     model.train()
