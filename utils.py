@@ -87,9 +87,13 @@ def save_predictions_as_imgs(
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
-        torchvision.utils.save_image(
-            preds, f"{folder}/pred_{idx}.png"
-        )
+        y = torch.movedim(y, 3, 1)
+        y = torch.movedim(y, 2, 3)
+        torchvision.utils.save_image(y.float(), f"{folder}/pred{idx}.png")
+
+        # torchvision.utils.save_image(
+        #     preds, f"{folder}/pred_{idx}.png"
+        # )
 
         print(y.shape)
         # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
@@ -103,10 +107,5 @@ def save_predictions_as_imgs(
         # y_img[:, :, :, 1] = y[:, :, :, 0]
         # y_img[:, :, :, 2] = y[:, :, :, 0]
         # y_img[:, :, :, 3] = y[:, :, :, 0]
-
-        y = torch.movedim(y, 3, 1)
-        y = torch.movedim(y, 2, 3)
-
-        torchvision.utils.save_image(y.float(), f"{folder}{idx}.png")
 
     model.train()
