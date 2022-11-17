@@ -28,6 +28,14 @@ def get_loaders(
         train_transform
     )
 
+    # train_loader = DataLoader(
+    #     train_ds,
+    #        batch_size=batch_size,
+    #     num_workers=4,
+    #     pin_memory=True,
+    #     shuffle=True,
+    # )
+
     train_loader = torch.utils.data.DataLoader(train_ds, batch_size=batch_size,
                                               shuffle=True, num_workers=2)
     val_ds = EgoHandsDataset(
@@ -35,8 +43,13 @@ def get_loaders(
         val_transform
     )
 
-    val_loader = torch.utils.data.DataLoader(val_ds, batch_size=batch_size,
-                                             shuffle=False, num_workers=2)
+    val_loader = DataLoader(
+        val_ds,
+        batch_size=batch_size,
+        num_workers=4,
+        pin_memory=True,
+        shuffle=True,
+    )
 
     return train_loader, val_loader
 
@@ -70,12 +83,27 @@ def save_predictions_as_imgs(
     model.eval()
     for idx, (x, y) in enumerate(loader):
         x = x.to(device=device)
+        print(x.shape)
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
         torchvision.utils.save_image(
             preds, f"{folder}/pred_{idx}.png"
         )
+
+        print(y.shape)
+        _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
+        # y_img = torch.zeros(3, h, w)
+        # y_img[0, :, :] = y
+        # y_img[1, :, :] = y
+        # y_img[2, :, :] = y
+
+        _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
+        y_img = torch.zeros(16, h, w, 3)
+        y_img[:, :, :, 1] = y
+        y_img[:, :, :, 2] = y
+        y_img[:, :, :, 3] = y
+
         torchvision.utils.save_image(y.unsqueeze(1), f"{folder}{idx}.png")
 
     model.train()
