@@ -19,8 +19,8 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16
 NUM_EPOCHS = 3
 NUM_WORKERS = 2
-IMAGE_HEIGHT = 90 
-IMAGE_WIDTH = 160  
+IMAGE_HEIGHT = 90  # 1280 originally
+IMAGE_WIDTH = 160  # 1918 originally
 PIN_MEMORY = True
 LOAD_MODEL = False
 # TRAIN_IMG_DIR = "data/train_images/"
@@ -33,14 +33,26 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
     for batch_idx, (data, targets) in enumerate(loop):
         data = data.to(device=DEVICE)
+        # targets = targets.float().unsqueeze(1).to(device=DEVICE)
         targets = targets.float().unsqueeze(1).to(device=DEVICE)
+        print(torch.unique(targets[:, :, :, :, 0]), 'index 0')
+        print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 1]))
+        print(torch.eq(targets[:, :, :, :, 1], targets[:, :, :, :, 2]))
+        print(torch.eq(targets[:, :, :, :, 0], targets[:, :, :, :, 2]))
+
+        print(torch.unique(targets[:, :, :, :, 1]), 'index 1')
+        print(torch.unique(targets[:, :, :, :, 2]), 'index 2')
+        targets = targets[:, :, :, :, 0]/255
+
+
 
         # forward
         with torch.cuda.amp.autocast():
             predictions = model(data)
             # predictions = predictions.float().unsqueeze(1).to(device=DEVICE)
-            print(predictions.shape)
-            print(targets.shape)
+            # targets.image.resize([16, 1, 90, 160])
+            # print(predictions.shape)
+            # print(targets.shape)
             loss = loss_fn(predictions, targets)
 
         # backward
@@ -82,7 +94,8 @@ def main():
     )
 
     model = UNET(in_channels=3, out_channels=1).to(DEVICE)
-    loss_fn = nn.BCEWithLogitsLoss()
+    # loss_fn = nn.BCEWithLogitsLoss()
+    loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     train_loader, val_loader = get_loaders(
