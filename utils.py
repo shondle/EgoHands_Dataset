@@ -36,8 +36,14 @@ def get_loaders(
     #     shuffle=True,
     # )
 
-    train_loader = torch.utils.data.DataLoader(train_ds, batch_size=batch_size,
-                                              shuffle=True, num_workers=2)
+    train_loader = DataLoader(
+        train_ds,
+        batch_size=batch_size,
+        num_workers=4,
+        pin_memory=True,
+        shuffle=True,
+    )
+    
     val_ds = EgoHandsDataset(
         get_meta_by('Location', 'COURTYARD', 'Activity', 'PUZZLE', 'Viewer', 'B', 'Partner', 'S'),
         val_transform
@@ -48,7 +54,7 @@ def get_loaders(
         batch_size=batch_size,
         num_workers=2,
         pin_memory=True,
-        shuffle=True,
+        shuffle=False,
     )
 
     return train_loader, val_loader
