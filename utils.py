@@ -46,7 +46,7 @@ def get_loaders(
     val_loader = DataLoader(
         val_ds,
         batch_size=batch_size,
-        num_workers=4,
+        num_workers=2,
         pin_memory=True,
         shuffle=True,
     )
@@ -86,16 +86,18 @@ def save_predictions_as_imgs(
         print(x.shape)
         with torch.no_grad():
             preds = torch.sigmoid(model(x))
-            preds = (preds > 0.5).float()
+            preds = (preds>0.5).float()
         y = torch.movedim(y, 3, 1)
         y = torch.movedim(y, 2, 3)
-        torchvision.utils.save_image(y.float(), f"{folder}/pred{idx}.png")
+        torchvision.utils.save_image(preds, f"{folder}/pred{idx}.png")
+        torchvision.utils.save_image(y.float(), f"{folder}{idx}.png")
 
         # torchvision.utils.save_image(
         #     preds, f"{folder}/pred_{idx}.png"
         # )
 
         print(y.shape)
+    model.train()
         # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
         # y_img = torch.zeros(3, h, w)
         # y_img[0, :, :] = y
@@ -107,5 +109,3 @@ def save_predictions_as_imgs(
         # y_img[:, :, :, 1] = y[:, :, :, 0]
         # y_img[:, :, :, 2] = y[:, :, :, 0]
         # y_img[:, :, :, 3] = y[:, :, :, 0]
-
-    model.train()
