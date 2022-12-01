@@ -1,15 +1,17 @@
 # EgoHands_Dataset
 
-Query 48 videos containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and binary hand segmentation labels. In addition, train and test the model from custom queried datasets. **Built entirely with Python!**
+Query 48 videos containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and binary hand segmentation labels. In addition, train and test the UNet model from custom queried datasets. **Built entirely with Python!**
 
 <table>
 <tr>
 <td> <b>Sample Run of DEMO1.py</b>
 <td><b>Visualizing Images and Segmentation Labels from Sample PyTorch Dataset Object</b>
+<td><b>Testing the UNet Model</b>
 </tr>
 <tr>
 <td> <img src="DEMO1output.png" alt="Drawing" style="width: 300px;"/> </td>
 <td> <img src="SegmentationVisualization.png" alt="Drawing" style="width: 550px;"/> </td>
+<td> <img src="unet_model_results.png" alt="Drawing" style="width: 550px;"/> </td>
 </tr></table>
 
 
@@ -23,7 +25,7 @@ Each file contains a description of what it does.
 
 `getMetaBy.py`, `getSegmentationMask.py`, `getFramePath.py`, `getBoundingBoxes.py`, and `DEMO1.py` contain (for the most part) the same descriptions as from the original EgoHands MATLAB code. The rest (`getTrainingImgs.py`, `visualizeDataset.py`, `dataset.py`, 'model.py', 'train.py') are fully commented out by myself.
 
-To get a quick overview of what this project can do, run `DEMO1.py` and read the commented out code. To view a sample PyTorch dataset queried from the videos, run `visualizeData.py`. To train and test the UNet model, run the main method in 'train.py'. All methods used and referenced include descriptions in the files themeselves.
+To get a quick overview of what this project can do, run `DEMO1.py` and read the commented out code. To view a sample PyTorch dataset queried from the videos, run `visualizeData.py`. To train and test the UNet model, run the main method in `train.py`. All methods used and referenced include descriptions in the files themeselves.
 
 ## Setting Up and Running the Code
 
