@@ -1,3 +1,8 @@
+"""
+utils.py contains functions called by train.py in order to train and test the model in
+model.py
+"""
+
 import torch
 import torchvision
 from dataset import EgoHandsDataset
@@ -5,36 +10,27 @@ from get_meta_by import get_meta_by
 from torch.utils.data import DataLoader
 
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
+    """save_checkpoint saves a checkpoint for a trained model"""
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
 def load_checkpoint(checkpoint, model):
+    """load_checkpoint allows you to load a previously trained model"""
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
 
 def get_loaders(
-    # train_dir,
-    # train_maskdir,
-    # val_dir,
-    # val_maskdir,
     batch_size,
     train_transform,
     val_transform,
-    # num_workers=4,
-    # pin_memory=True,
 ):
+    """Specify your training and validation dataset for training and testing your model"""
+
+    # training dataset
     train_ds = EgoHandsDataset(
         get_meta_by('Location', 'COURTYARD', 'Activity', 'PUZZLE', 'Viewer', 'B', 'Partner', 'S'),
         train_transform
     )
-
-    # train_loader = DataLoader(
-    #     train_ds,
-    #        batch_size=batch_size,
-    #     num_workers=4,
-    #     pin_memory=True,
-    #     shuffle=True,
-    # )
 
     train_loader = DataLoader(
         train_ds,
@@ -43,16 +39,18 @@ def get_loaders(
         pin_memory=True,
         shuffle=True,
     )
-    
+
+    # validation dataset
     val_ds = EgoHandsDataset(
-        get_meta_by('Location', 'COURTYARD', 'Activity', 'PUZZLE', 'Viewer', 'B', 'Partner', 'S'),
+        # switched S and B
+        get_meta_by('Location', 'COURTYARD', 'Activity', 'PUZZLE', 'Viewer', 'S', 'Partner', 'B'),
         val_transform
     )
 
     val_loader = DataLoader(
         val_ds,
         batch_size=batch_size,
-        num_workers=2,
+        num_workers=4,
         pin_memory=True,
         shuffle=False,
     )
@@ -60,6 +58,7 @@ def get_loaders(
     return train_loader, val_loader
 
 def check_accuracy(loader, model, device="cuda"):
+    """Checks the accuracy between the ground truth and predicted binary segmentation masks."""
     num_correct = 0
     num_pixels = 0
     dice_score = 0
@@ -86,6 +85,9 @@ def check_accuracy(loader, model, device="cuda"):
 def save_predictions_as_imgs(
     loader, model, folder="saved_images/", device="cuda"
 ):
+    """saves the predictions of both the ground state and predicted binary segmentation masks
+    from the images in the validation dataset
+    """
     model.eval()
     for idx, (x, y) in enumerate(loader):
         x = x.to(device=device)
@@ -94,24 +96,11 @@ def save_predictions_as_imgs(
             preds = torch.sigmoid(model(x))
             preds = (preds>0.5).float()
         y = torch.movedim(y, 3, 1)
-        y = torch.movedim(y, 2, 3)
-        torchvision.utils.save_image(preds, f"{folder}/pred{idx}.png")
         torchvision.utils.save_image(y.float(), f"{folder}{idx}.png")
 
-        # torchvision.utils.save_image(
-        #     preds, f"{folder}/pred_{idx}.png"
-        # )
+        torchvision.utils.save_image(
+            preds, f"{folder}/pred_{idx}.png"
+        )
 
         print(y.shape)
     model.train()
-        # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
-        # y_img = torch.zeros(3, h, w)
-        # y_img[0, :, :] = y
-        # y_img[1, :, :] = y
-        # y_img[2, :, :] = y
-
-        # _, h, w, _ = y.shape  # assumes y's torch shape is (h,w) and NOT (batch_size, h, w)
-        # y_img = torch.zeros(16, h, w, 3)
-        # y_img[:, :, :, 1] = y[:, :, :, 0]
-        # y_img[:, :, :, 2] = y[:, :, :, 0]
-        # y_img[:, :, :, 3] = y[:, :, :, 0]
