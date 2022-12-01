@@ -1,6 +1,6 @@
 # EgoHands_Dataset
 
-Query over 48 hours of video containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and black-and-white hand segmentation labels. **Built entirely with Python!**
+Query 48 videos containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and binary hand segmentation labels. **Built entirely with Python!**
 
 <table>
 <tr>
@@ -90,7 +90,7 @@ where python
 ```
 
 ### Downloading the EgoHands Labelled Frames from Indiana University
-Go to [this link](http://vision.soic.indiana.edu/projects/egohands/) and download the "Labelled Data" Zip Archive (which should be around 1.3GB). Unzip this file and drag the \_LABELLEDSAMPLES\_ folder into the same folder where the files of this project are located.
+Go to [this link](http://vision.soic.indiana.edu/projects/egohands/) and download the "Labelled Data" Zip Archive (which should be around 1.3GB). Unzip this file and drag the \_LABELLEDSAMPLES\_ folder into the same directory level as the rest of the code.
 
 Now, you should be good to go!
 
