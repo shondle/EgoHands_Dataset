@@ -1,4 +1,4 @@
-"""model.py contains the structure for the UNet model to be applied"""
+"""model.py contains the UNet architecture"""
 
 import torch
 import torch.nn as nn
