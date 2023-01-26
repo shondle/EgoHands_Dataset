@@ -65,7 +65,7 @@ conda install pip
 pip install opencv-python
 ```
 ```
-conda install -c conda-forge scipy numpy pandas matplotlib pathlib
+conda install -c conda-forge scipy numpy pandas matplotlib pathlib albumentations tqdm
 ````
 <br>
 
