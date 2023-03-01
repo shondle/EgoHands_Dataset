@@ -131,9 +131,12 @@ def save_predictions_as_imgs(
         class_dim = 0
         print(f"Shape of preds is {preds.shape}")
         preds = F.interpolate(preds, size=(720, 1280), mode = 'nearest')
-
+        # print(f"shape of y is {y.shape}")
+        # y = F.interpolate(y, size=(720, 1280))
+        # print(f"shape of y is {y.shape}")
 
         bool_hand_masks = (preds[:, 0,  :, :] == 1)
+        # bool_ground_masks = (y[:, 0,  :, :] == 1)
 
         # plt.imshow(x[0, :, :, :].permute(1, 2, 0))
         print(bool_hand_masks.shape)
@@ -143,8 +146,8 @@ def save_predictions_as_imgs(
             # pil_img = Image.fromarray(img)
             print(img)
             print(img.shape)
-            print(f"The shape of the mask is {mask.shape} and x1 is {x1.shape} and bool hand mask is {bool_hand_masks.shape}")
-        
+            print(f"The shape of the y bool ground is {y.shape}.shape and x1 is {x1.shape} and bool hand mask is {bool_hand_masks.shape}")
+            print(f"Unique is {torch.unique(y)}")
         hands_with_masks = [
             draw_segmentation_masks(img.permute(2, 0, 1), masks=mask, alpha=0.5, colors="yellow")
             for img, mask in zip(x1, bool_hand_masks)
@@ -157,18 +160,21 @@ def save_predictions_as_imgs(
 
         masks = [
             mask
-            for img, mask in zip(x1, bool_hand_masks)
+            for img, mask in zip(x1, y)
         ]
 
         fig, axs = plt.subplots(1, 3, figsize=(10, 5))
-        axs[2].imshow(hands_with_masks[0].permute(1, 2, 0))
-        axs[2].set_title('Predicted Overlay')
+        axs[1].imshow(hands_with_masks[0].permute(1, 2, 0))
+        axs[1].set_title('Predicted Segmentation Mask')
+        axs[1].axis('off')
 
-        axs[1].imshow(images[0].permute(1, 2, 0))
-        axs[1].set_title('Ground Truth Labels')
+        axs[0].imshow(images[0].permute(1, 2, 0))
+        axs[0].set_title('Image')
+        axs[0].axis('off')
 
-        axs[0].imshow(masks[0])
-        axs[0].set_title('Ground Truth Mask')
+        axs[2].imshow(masks[0].permute(1, 2, 0))
+        axs[2].set_title('Ground Truth Mask')
+        axs[2].axis('off')
 
         # plt.imshow(preds[0,:, :, :].permute(1, 2, 0), alpha = 0.6)
         plt.savefig("img3.jpg", dpi=300)
