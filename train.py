@@ -12,7 +12,7 @@ from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
-from model import UNET
+from fast_scnn_model import FastSCNN
 from utils import (
     load_checkpoint,
     save_checkpoint,
@@ -66,7 +66,7 @@ def main():
 
     train_transform = A.Compose(
         [
-            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            A.Resize(height=720, width=1280), #IMAGE_HEIGHT ; IMAGE_WIDTH
             A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.1),
@@ -81,7 +81,7 @@ def main():
 
     val_transforms = A.Compose(
         [
-            A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
+            A.Resize(height=720, width=1280),  #IMAGE_HEIGHT ; IMAGE_WIDTH
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
@@ -91,7 +91,7 @@ def main():
         ],
     )
 
-    model = UNET(in_channels=3, out_channels=1).to(DEVICE)
+    model = FastSCNN(in_channels=3, num_classes=1).to(DEVICE)
     loss_fn = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
