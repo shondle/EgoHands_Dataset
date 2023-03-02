@@ -14,20 +14,20 @@ __all__ = ['FastSCNN', 'get_fast_scnn']
 
 
 class FastSCNN(nn.Module):
-    def __init__(self, num_classes, aux=False, **kwargs):
+    def __init__(self, in_channels, out_channels, aux=False, **kwargs):
         super(FastSCNN, self).__init__()
         self.aux = aux
         self.learning_to_downsample = LearningToDownsample(32, 48, 64)
         self.global_feature_extractor = GlobalFeatureExtractor(64, [64, 96, 128], 128, 6, [3, 3, 3])
         self.feature_fusion = FeatureFusionModule(64, 128, 128)
-        self.classifier = Classifer(128, num_classes)
+        self.classifier = Classifer(128, out_channels)
         if self.aux:
             self.auxlayer = nn.Sequential(
                 nn.Conv2d(64, 32, 3, padding=1, bias=False),
                 nn.BatchNorm2d(32),
                 nn.ReLU(True),
                 nn.Dropout(0.1),
-                nn.Conv2d(32, num_classes, 1)
+                nn.Conv2d(32, out_channels, 1)
             )
 
     def forward(self, x):
@@ -39,11 +39,11 @@ class FastSCNN(nn.Module):
         outputs = []
         x1 = F.interpolate(x, size, mode='bilinear', align_corners=True) # resize once
         outputs.append(x1)
-        # if self.aux:
-        #     auxout = self.auxlayer(higher_res_features)
-        #     x2 = F.interpolate(auxout, size, mode='bilinear', align_corners=True) # resize twice
-        #     x2 = F.interpolate(x2, size, mode='bilinear', align_corners=True)
-        #     outputs.append(x2)
+        if self.aux:
+            auxout = self.auxlayer(higher_res_features)
+            x2 = F.interpolate(auxout, size, mode='bilinear', align_corners=True) # resize twice
+            x2 = F.interpolate(x2, size, mode='bilinear', align_corners=True)
+            outputs.append(x2)
         x = F.interpolate(x, size, mode='bilinear', align_corners=True)
         outputs.append(x)
         if self.aux:
@@ -264,10 +264,11 @@ class Classifer(nn.Module):
 #     outputs = model(img)
 
 def test():
-    x = torch.randn((3, 1, 161, 161))
-    model = FastSCNN(in_channels=1,  out_channels=1) 
+    x = torch.randn((3, 3, 161, 161))
+    model = FastSCNN(in_channels=3,  out_channels=1) 
     preds = model(x)
-    assert preds.shape == x.shape
+    print(preds[0].shape)
+    print(preds[0].shape == x.shape)
 
 if __name__ == "__main__":
     test()

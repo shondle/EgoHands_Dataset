@@ -27,8 +27,10 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16
 NUM_EPOCHS = 30
 NUM_WORKERS = 2
-IMAGE_HEIGHT = 90
-IMAGE_WIDTH = 160
+# IMAGE_HEIGHT = 90
+# IMAGE_WIDTH = 160
+IMAGE_HEIGHT = 161
+IMAGE_WIDTH = 161
 PIN_MEMORY = True
 LOAD_MODEL = False
 
@@ -44,9 +46,13 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
         targets = targets.float().unsqueeze(1).to(device=DEVICE)
         targets = targets[:, :, :, :, 0]/255
 
+        print(f"Shape of the data is {data.shape}")
+        print(f"Shape of the targets is {targets.shape}")
+
         # forward
         with torch.cuda.amp.autocast():
             predictions = model(data)
+            print(f"Shape of the predictions is {predictions.shape}")
             loss = loss_fn(predictions, targets)
 
         # backward
@@ -66,7 +72,7 @@ def main():
 
     train_transform = A.Compose(
         [
-            A.Resize(height=720, width=1280), #IMAGE_HEIGHT ; IMAGE_WIDTH
+            A.Resize(height=161, width=161), #IMAGE_HEIGHT - 720 ; IMAGE_WIDTH - 1280
             A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.1),
@@ -81,7 +87,7 @@ def main():
 
     val_transforms = A.Compose(
         [
-            A.Resize(height=720, width=1280),  #IMAGE_HEIGHT ; IMAGE_WIDTH
+            A.Resize(height=161, width=161),  #IMAGE_HEIGHT - 720 ; IMAGE_WIDTH - 1280
             A.Normalize(
                 mean=[0.0, 0.0, 0.0],
                 std=[1.0, 1.0, 1.0],
