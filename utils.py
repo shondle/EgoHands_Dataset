@@ -68,7 +68,9 @@ def check_accuracy(loader, model, device="cuda"):
         for x, y in loader:
             x = x.to(device)
             y = y.to(device).unsqueeze(1)
-            preds = torch.sigmoid(model(x))
+            preds = model(x)
+            preds = preds[0]
+            preds = torch.sigmoid(preds)
             preds = (preds > 0.5).float()
             num_correct += (preds == y).sum()
             num_pixels += torch.numel(preds)
@@ -93,7 +95,9 @@ def save_predictions_as_imgs(
         x = x.to(device=device)
         print(x.shape)
         with torch.no_grad():
-            preds = torch.sigmoid(model(x))
+            preds = model(x)
+            preds = preds[0]
+            preds = torch.sigmoid(preds)
             preds = (preds>0.5).float()
         y = torch.movedim(y, 3, 1)
         torchvision.utils.save_image(y.float(), f"{folder}{idx}.png")

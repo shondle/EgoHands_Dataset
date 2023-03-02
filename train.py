@@ -25,7 +25,7 @@ from utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16
-NUM_EPOCHS = 30
+NUM_EPOCHS = 150
 NUM_WORKERS = 2
 # IMAGE_HEIGHT = 90
 # IMAGE_WIDTH = 160
@@ -52,6 +52,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
         # forward
         with torch.cuda.amp.autocast():
             predictions = model(data)
+            predictions = predictions[0]
             print(f"Shape of the predictions is {predictions.shape}")
             loss = loss_fn(predictions, targets)
 
@@ -97,7 +98,7 @@ def main():
         ],
     )
 
-    model = FastSCNN(in_channels=3, num_classes=1).to(DEVICE)
+    model = FastSCNN(in_channels=3, out_channels=1).to(DEVICE)
     loss_fn = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
