@@ -25,7 +25,7 @@ Each file contains a description of what it does.
 
 `getMetaBy.py`, `getSegmentationMask.py`, `getFramePath.py`, `getBoundingBoxes.py`, and `DEMO1.py` contain (for the most part) the same descriptions as from the original EgoHands MATLAB code. The rest (`getTrainingImgs.py`, `visualizeDataset.py`, `dataset.py`, 'model.py', 'train.py') are fully commented out by myself.
 
-To get a quick overview of what this project can do, run `DEMO1.py` and read the commented out code. To view a sample PyTorch dataset queried from the videos, run `visualizeData.py`. To train and test the UNet model, run the main method in `train.py`. All methods used and referenced include descriptions in the files themeselves.
+To train and test the UNet model, run the main method in `train.py`. All methods used and referenced include descriptions in the files themeselves. To get a quick overview of what this project can do, run `DEMO1.py` and read the commented out code. To view a sample PyTorch dataset queried from the videos, run `visualizeData.py`.
 
 ## Setting Up and Running the Code
 
