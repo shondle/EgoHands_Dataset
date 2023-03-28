@@ -1,6 +1,6 @@
 # EgoHands_Dataset
 
-Query 48 videos containing complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and binary hand segmentation labels. In addition, train and test the UNet model from custom queried datasets. **Built entirely with Python!**
+Train and test a hand segmentation model with the UNet architecture by querying over 48 hours of complex first-person interactions from the EgoHands Dataset using filters (location, activity, viewer, partner), and create a PyTorch Database object of respective images and binary hand segmentation labels. Built entirely with Python! 
 
 <table>
 <tr>
