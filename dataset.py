@@ -5,7 +5,7 @@ object and visualize the data from visualize_dataset.py
 """
 
 from torch.utils.data import Dataset
-from get_training_imgs import get_training_mask, get_training_image
+from EgoHands_Dataset.get_training_imgs import get_training_mask, get_training_image
 
 
 class EgoHandsDataset(Dataset):
@@ -32,7 +32,7 @@ class EgoHandsDataset(Dataset):
         mask = self.masks[index]
 
         if self.transform is not None:
-            augmentations = self.transform(imgage=img, mask=mask)
+            augmentations = self.transform(image=img, mask=mask)
             img = augmentations["image"]
             mask = augmentations["mask"]
 
