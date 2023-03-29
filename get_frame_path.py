@@ -13,7 +13,7 @@ def get_frame_path(video, i):
     check again to make sure that the _LABELLED_SAMPLE_ folder is in the same directory
     as the rest of the code"""
 
-    base_path = os.path.join(os.getcwd(), '_LABELLED_SAMPLES', (video.loc['video_id'])[0])
+    base_path = os.path.join(os.getcwd(), './EgoHands_Dataset/_LABELLED_SAMPLES', (video.loc['video_id'])[0])
     frame_path = os.path.join(base_path, 'frame_%(number)04d.jpg' %
                               {'number': (video.loc['labelled_frames'])[0][i][0][0][0]})
     return frame_path

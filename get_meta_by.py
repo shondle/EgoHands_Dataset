@@ -79,7 +79,7 @@ def get_meta_by(*args):
     partner = partner_params.split(", ")
 
     # loading metadata.mat
-    meta_contents = sio.loadmat('./metadata.mat')
+    meta_contents = sio.loadmat('./EgoHands_Dataset/metadata.mat')
     annotations = meta_contents['video'][0]
     annotations_df = pd.DataFrame(annotations, columns=['video_id', 'partner_video_id',
                                                         'ego_viewer_id', 'partner_id',

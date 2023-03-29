@@ -7,8 +7,8 @@ from video and frame number specified
 """
 
 import cv2
-from get_frame_path import get_frame_path
-from get_segmentation_mask import get_segmentation_mask
+from EgoHands_Dataset.get_frame_path import get_frame_path
+from EgoHands_Dataset.get_segmentation_mask import get_segmentation_mask
 
 
 def get_training_image(video_num, frame_num, videos):
